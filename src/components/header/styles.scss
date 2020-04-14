@@ -1,0 +1,39 @@
+@import '../../theme/index.scss';
+
+.header {
+  display: flex;
+
+  > div {
+    width: 50%;
+    position: relative;
+
+    &:first-child {
+      &:after {
+        content: ' ';
+        position: absolute;
+        top: 10%;
+        right: 0;
+        width: 1px;
+        height: 80%;
+        background: #fff;
+      }
+    }
+
+    a {
+      display: block;
+      color: #FFF;
+      background: $color-dark;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      padding: 10px;
+
+      transition: all 200ms ease-in-out;
+
+      &.on {
+        color: $color-dark;
+        background: #fff;
+      }
+    }
+  }
+}

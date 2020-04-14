@@ -1,36 +1,34 @@
 import { useState, useEffect } from 'react';
 import { ViewportType } from './mapType';
-import { Viewport } from 'react-map-gl';
 
-export const useMap = ({
-	latitude,
-	longitude,
-	zoom,
-	height,
-	width
-}: ViewportType) => {
-  const [viewport, setViewport] = useState<ViewportType>({
-    latitude: latitude,
-    longitude: longitude,
-    height: height,
-    width: width,
-    zoom: zoom,
-	});
-	
-	const changeViewport = (newViewport: Viewport) => {
-		setViewport({
-			...newViewport,
-			height: window.innerHeight,
-			width: window.innerWidth,
-    });
+export const useMap = () => {
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
+  const [latitude, setLatitude] = useState<number>(0);
+  const [longitude, setLongitude] = useState<number>(0);
+  const [zoom, setZoom] = useState<number>(0);
+
+	const changeViewport = (viewport: ViewportType) => {
+    if (viewport.width) setWidth(viewport.width);
+    if (viewport.height) setHeight(viewport.height);
+    if (viewport.latitude) setLatitude(viewport.latitude);
+    if (viewport.longitude) setLongitude(viewport.longitude);
+    if (viewport.zoom) setZoom(viewport.zoom);
 	};
 
   useEffect(() => {
-    window.addEventListener('resize', () => changeViewport(viewport));
+    window.addEventListener('resize', () => changeViewport({
+      height: window.innerHeight - 39, // 39 = header height
+      width: window.innerWidth
+    }));
   }, []);
 
   return {
-		viewport,
-		changeViewport,
+		width,
+    height,
+    latitude,
+    longitude,
+    zoom,
+    changeViewport
   };
 }

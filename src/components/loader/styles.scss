@@ -1,0 +1,250 @@
+@import '../../theme/index.scss';
+
+$thickness : 2px;
+$duration : 2500;
+$delay : $duration/6;
+
+@mixin polka($size, $dot, $base, $accent){
+  background: $base;
+  background-image: radial-gradient($accent $dot, transparent 0);
+  background-size: $size $size;
+  background-position: 0 -2.5px;
+}
+
+.bookshelf_wrapper {
+  position: relative;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.books_list {
+  margin: 0 auto;
+  width: 150px;
+  padding: 0;
+}
+
+.book_item {
+  position: absolute;
+  top: -60px;
+  box-sizing: border-box;
+  list-style: none;
+  width: 20px;
+  height: 60px;
+  opacity: 0;
+  background-color: $color-dark;
+  border: $thickness solid $color-text;
+  transform-origin: bottom left;
+  transform: translateX(150px);
+  animation: travel #{$duration}ms linear infinite;
+  
+  &.first {
+    top: -70px;
+    height: 70px;
+    
+    &:before,
+    &:after {
+      content:'';
+      position: absolute;
+      top: 5px;
+      left: 0;
+      width: 100%;
+      height: $thickness;
+      background-color: $color-text;
+    }
+
+    &:after {
+      top: initial;
+      bottom: 5px;
+    }
+  }
+  
+  &.second,
+  &.fifth {
+    &:before,
+    &:after {
+      box-sizing: border-box;
+      content:'';
+      position: absolute;
+      top: 5px;
+      left: 0;
+      width: 100%;
+      height: $thickness*3.5;
+      border-top: $thickness solid $color-text;
+      border-bottom: $thickness solid $color-text;
+    }
+
+    &:after {
+      top: initial;
+      bottom: 5px;
+    }
+  }
+  
+  &.third {
+    &:before,
+    &:after {
+      box-sizing: border-box;
+      content:'';
+      position: absolute;
+      top: 5px;
+      left: 4.5px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border: $thickness solid $color-text;
+    }
+
+    &:after {
+      top: initial;
+      bottom: 5px;
+    }
+  }
+  
+  &.fourth {
+    top: -70px;
+    height: 70px;
+    
+    &:before {
+      box-sizing: border-box;
+      content:'';
+      position: absolute;
+      top: 23px;
+      left: 0;
+      width: 100%;
+      height: $thickness*3.5;
+      border-top: $thickness solid $color-text;
+      border-bottom: $thickness solid $color-text;
+    }
+  }
+  
+  &.fifth {
+    top: -50px;
+    height: 50px;
+  }
+  
+  &.sixth {
+    top: -70px;
+    height: 70px;
+    
+    &:before {
+      box-sizing: border-box;
+      content:'';
+      position: absolute;
+      bottom: 15.5px;
+      left: 0px;
+      width: 100%;
+      height: $thickness;
+      background-color: $color-text;
+    }
+
+    &:after {
+      box-sizing: border-box;
+      content:'';
+      position: absolute;
+      bottom: 5px;
+      left: 4.5px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border: $thickness solid $color-text;
+    }
+  }
+  
+  &:nth-child(2) {
+    animation-delay: #{$delay*1}ms;
+  }
+  &:nth-child(3) {
+    animation-delay: #{$delay*2}ms;
+  }
+  &:nth-child(4) {
+    animation-delay: #{$delay*3}ms;
+  }
+  &:nth-child(5) {
+    animation-delay: #{$delay*4}ms;
+  }
+  &:nth-child(6) {
+    animation-delay: #{$delay*5}ms;
+  }
+}
+
+.shelf {
+  width: 150px;
+  height: $thickness;
+  margin: 0 auto;
+  background-color: $color-text;
+  position: relative;
+  
+  &:before,
+  &:after {
+    content:'';
+    position : absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    @include polka(10px, 30%, $color-dark, $color-text);
+    top: 200%;
+    left: 5%;
+    animation: move #{$duration/10}ms linear infinite;
+  }
+  
+  &:after {
+    top: 400%;
+    left: 7.5%;
+  }
+  
+}
+
+@keyframes move {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: 5px;
+  }
+}
+
+@keyframes travel {
+  0% {
+    opacity: 0;
+    transform: translateX(160px) rotateZ(0deg) scaleY(1);
+  }
+  6.5% {
+    transform: translateX(139.75px) rotateZ(0deg) scaleY(1.1);
+  }
+  8.8% {
+    transform: translateX(136.8px) rotateZ(0deg) scaleY(1);
+  }
+  10% {
+    opacity: 1;
+    transform: translateX(135px) rotateZ(0deg);
+  }
+  17.6% {
+    transform: translateX(123.6px) rotateZ(-30deg);
+  }
+  45% {
+    transform: translateX(82.5px) rotateZ(-30deg);
+  }
+  49.5% {
+    transform: translateX(75.75px) rotateZ(-45deg);
+  }
+  61.5% {
+    transform: translateX(57.75px) rotateZ(-45deg);
+  }
+  67% {
+    transform: translateX(49.5px) rotateZ(-60deg);
+  }
+  76% {
+    transform: translateX(36px) rotateZ(-60deg);
+  }
+  83.5% {
+    opacity: 1;
+    transform: translateX(24.75px) rotateZ(-90deg);
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0px) rotateZ(-90deg);
+  }
+}

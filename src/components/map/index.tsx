@@ -1,49 +1,82 @@
 import * as React from 'react';
-import ReactMapGL, { NavigationControl, Viewport, ViewStateChangeInfo } from 'react-map-gl';
+import ReactMapGL, { NavigationControl, ViewStateChangeInfo, GeolocateControl, ViewportProps } from 'react-map-gl';
+// import { useLoader } from '../loader/LoadingContext';
 import { useMap } from './useMap';
+import Loader from "../loader";
+import BookBox from '../bookBox';
+import { useBookBox } from '../bookBox/useBookBox';
+
 import './styles.scss';
+import LoadingContext from '../loader/LoadingContext';
 
-const Map: React.FC = () => {
-	const { viewport, changeViewport } = useMap({
-		latitude: 0,
-		longitude: 0,
-		height: window.innerHeight,
-		width: window.innerWidth,
-		zoom: 14,
-	});
-	const loading = viewport.latitude === 0 || viewport.longitude === 0;
+const geolocateStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  margin: 10
+};
 
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition((position) => {
-			const { latitude, longitude } = position.coords;
-			changeViewport({
-				...viewport,
-				latitude,
-				longitude
-			})
-		});
-	}
+const Map: React.FC = (props) => {
+	const { 
+		width,
+    height,
+    latitude,
+    longitude,
+    zoom,
+    changeViewport
+  } = useMap();
+
+  const { loading, setLoading } = React.useContext(LoadingContext);
+  const { books } = useBookBox();
+
+  React.useEffect(() => {
+    console.log('fuuuu')
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+        if (loading) {
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
+          changeViewport({
+            latitude,
+            longitude,
+            height: window.innerHeight - 39, // 39 = header height
+            width: window.innerWidth,
+            zoom: 14,
+          });
+        }
+      });
+    }
+  }, [loading]);
+
+  if (loading) return <Loader />;
 
 	return (
-		<>
-			{loading ?
-				'loading' : 
-				<ReactMapGL
-					{...viewport}
-					mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
-					onViewportChange={(updatedViewport: Viewport) => changeViewport(updatedViewport)} >
-					
-					<div style={{ position: 'absolute', right: 30, bottom: 30 }}>
-						<NavigationControl 
-							onViewportChange={(updatedViewport: Viewport) => changeViewport(updatedViewport)}
-							onViewStateChange={(v: ViewStateChangeInfo) => console.log(v)}
-						/>
-					</div>
-				</ReactMapGL>
-			}
-		</>
+    <ReactMapGL
+      width={width}
+      height={height}
+      latitude={latitude}
+      longitude={longitude}
+      zoom={zoom}
+      mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+      mapStyle="mapbox://styles/lanigram/ck8x3ytxx3vs31ipa06uo9tik"
+      onViewportChange={(updatedViewport: ViewportProps) => changeViewport(updatedViewport)} >
+      <GeolocateControl
+        style={geolocateStyle}
+        positionOptions={{enableHighAccuracy: true}}
+        trackUserLocation={true}
+        showUserLocation={true}
+      />
+      <BookBox books={books}/>
+      <div style={{ position: 'absolute', right: 30, bottom: 30 }}>
+        <NavigationControl 
+          onViewportChange={(updatedViewport: ViewportProps) => changeViewport(updatedViewport)}
+          onViewStateChange={(v: ViewStateChangeInfo) => console.log(v)}
+        />
+      </div>
+    </ReactMapGL>
 	);
  }
 
  export default Map;
- 
