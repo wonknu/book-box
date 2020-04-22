@@ -4,6 +4,7 @@ export interface BookType {
   longitude: number;
   name: string;
   image: string;
+  onClickBook?: (book: BookType) => void;
 }
 
 export interface BooksType {

@@ -1,7 +1,22 @@
 @import '../../theme/index.scss';
 
 .marker {
+  .mapboxgl-marker {
+    background: $color-marker-home;
+    transition: all 200ms ease-in-out;
+  }
+  .mapboxgl-user-location-dot {
+    &:before {
+      background: $color-marker-home;
+    }
+  }
   .icon-home {
-    fill: $color-marker-home;
+    fill: white;
+    width: 11px;
+    height: 11px;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    z-index: 999;
   }
 }

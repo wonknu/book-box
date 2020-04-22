@@ -30,7 +30,6 @@ const Map: React.FC = (props) => {
   const { books } = useBookBox();
 
   React.useEffect(() => {
-    console.log('fuuuu')
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(position => {
         const { latitude, longitude } = position.coords;
